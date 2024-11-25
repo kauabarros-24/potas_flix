@@ -1,204 +1,229 @@
 <template>
-  <header>
-    <!-- Associando a ref ao logo -->
-    <div class="logo" ref="logoRef">PotasFlix</div>
-    <div class="header-buttons">
-      <!-- Botões de navegação (Séries, Filmes, Anúncios) -->
-      <div class="nav-buttons">
-        <button class="nav-button">Séries</button>
-        <button class="nav-button">Filmes</button>
-        <button class="nav-button">Anúncios</button>
-      </div>
-      <div class="search-container" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-        <input type="text" placeholder="Search" class="search-input" :class="{ expanded: isHovered }" />
-        <button class="lupa" :class="{ hidden: isHovered }">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+  <header class="clean-header">
+    <div class="logo">PotasFlix</div>
+    <nav class="navigation">
+      <button 
+        v-for="tab in tabs" 
+        :key="tab" 
+        class="nav-item" 
+        :class="{ active: activeTab === tab }" 
+        @click="setActive(tab)">
+        {{ tab }}
+      </button>
+    </nav>
+    <div class="profile">
+      <div class="search-container" 
+           @mouseenter="handleHover" 
+           @mouseleave="handleMouseLeave">
+        <!-- Campo de pesquisa -->
+        <input 
+          ref="searchInput"
+          v-model="searchQuery" 
+          type="text" 
+          class="search-box" 
+          placeholder="Pesquisar..."
+          :class="{ expanded: isSearchActive }"
+        />
+        <!-- Lupinha de pesquisa à direita -->
+        <i class="icon bi bi-search" @click="focusSearch">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
-        </button>
+        </i>
       </div>
-      <div class="buttons-container">
-        <button class="login-button">Login</button>
-        <button class="profile-button">Profile</button>
+      <div class="user">
+        <button class="signup">Signup</button>
+        <button class="login">Login</button>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
-  data() {
-    return {
-      isHovered: false,  // Variável para controlar o estado do hover
+  setup() {
+    const tabs = ["Home", "Series", "Originals"];
+    const activeTab = ref("Home");
+    const searchQuery = ref("");
+    const isSearchActive = ref(false);
+    const searchInput = ref(null);
+
+    const setActive = (tab) => {
+      activeTab.value = tab;
     };
-  },
-  methods: {
-    // Função que ativa quando o mouse entra no container de busca
-    handleMouseEnter() {
-      this.isHovered = true;
-    },
-    // Função que ativa quando o mouse sai do container de busca
-    handleMouseLeave() {
-      this.isHovered = false;
-    },
+
+    const handleHover = () => {
+      isSearchActive.value = true;
+    };
+
+    const handleMouseLeave = () => {
+      if (!searchQuery.value) {
+        isSearchActive.value = false;
+      }
+    };
+
+    const focusSearch = () => {
+      searchInput.value.focus();
+    };
+
+    return {
+      tabs,
+      activeTab,
+      searchQuery,
+      isSearchActive,
+      searchInput,
+      setActive,
+      handleHover,
+      handleMouseLeave,
+      focusSearch,
+    };
   },
 };
 </script>
 
-<style>
-/* Estilo geral do body */
-body {
-  margin: 0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #141414;
-  color: #fff;
-}
-
-header {
+<style scoped>
+/* Header Container */
+.clean-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 3rem;
-  background-color: rgba(0, 0, 0, 0.85);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-  position: fixed;
+  padding: 15px 30px;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  color: #333;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  transition: all 0.3s ease;
+  z-index: 100;
 }
 
+/* Logo */
 .logo {
-  font-size: 3.2rem;
+  font-size: 1.3rem;
   font-weight: bold;
-  color: #e50914;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  color: #333;
 }
 
-header:hover .logo {
-  transform: scale(1.05);
-}
-
-.header-buttons {
+/* Navigation */
+.navigation {
   display: flex;
-  align-items: center;
-  gap: 2.5rem;
+  gap: 20px;
 }
 
-.nav-buttons {
-  display: flex;
-  gap: 2rem;
-}
-
-.nav-button {
+.nav-item {
   background: none;
   border: none;
-  color: white;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  color: #555;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-item.active,
+.nav-item:hover {
+  color: #111;
+  border: 2px solid black;
+}
+
+/* Profile Section */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Search Container */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse; /* Faz a lupa aparecer à direita */
+}
+
+.icon {
+  font-size: 2rem; /* Aumentando a lupa */
+  color: black; /* Tornando a lupa preta */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.icon:hover {
+  color: #333;
+}
+
+.search-box {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  width: 0px;
+  padding: 0;
+  opacity: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  background: white;
+  color: #333;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.search-box.expanded {
+  width: 200px;
+  padding: 8px 10px;
+  opacity: 1;
+  border: 1px solid #ddd;
+}
+
+.search-box::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Buttons Style */
+.signup,
+.login {
+  width: 90px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
   font-weight: bold;
   cursor: pointer;
-  transition: color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.nav-button:hover {
-  color: #e50914;
+.signup {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  margin-right: 10px;
+}
+
+.signup:hover {
   transform: scale(1.05);
+  transition: 0.3s;
 }
 
-.search-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.search-input {
-  height: 40px;
-  width: 0;
-  padding: 0 15px;
-  border: none;
-  border-radius: 25px;
-  font-size: 1rem;
-  outline: none;
-  transition: width 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
-  background-color: #333;
+.login {
+  background-color: black; 
   color: white;
+  border: 2px solid black;
 }
 
-.search-input.expanded {
-  width: 280px;
-  opacity: 1;
-}
-
-.lupa {
-  background-color: #333;
-  border: none;
-  border-radius: 50%;
-  padding: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 10px;
-  z-index: 1;
-  transition: transform 0.3s ease;
-}
-
-.lupa.hidden {
-  opacity: 0;
-}
-
-.lupa svg {
-  fill: white;
-  width: 20px;
-  height: 20px;
-}
-
-.buttons-container {
-  display: flex;
-  gap: 1.8rem;
-}
-
-.login-button,
-.profile-button {
-  background-color: #e50914;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: 0.8rem 2.5rem;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-}
-
-.login-button:hover,
-.profile-button:hover {
-  background-color: #f40612;
+.login:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  transition: 0.3s;
 }
-
-@media (max-width: 768px) {
-  header {
-    padding: 0.8rem 2rem;
-  }
-
-  .logo {
-    font-size: 2.5rem;
-  }
-
-  .nav-buttons {
-    display: none;
-  }
-
-  .buttons-container {
-    gap: 1.2rem;
-  }
+.logo:hover {
+  transform: scale(1.1);
+  transition: 0.4s;
 }
 </style>

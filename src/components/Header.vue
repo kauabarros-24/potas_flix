@@ -116,21 +116,24 @@ export default {
 
 .nav-item {
   background: none;
-  border: none;
   font-size: 1rem;
+  border: none;
   color: #555;
   cursor: pointer;
   font-family: sans-serif;
   font-weight: bold;
   padding: 8px 15px;
-  border-radius: 10px;
   transition: background-color 0.3s, color 0.3s;
 }
 
-.nav-item.active,
 .nav-item:hover {
-  color: #111;
-  border: 2px solid black;
+  font-size: 20px;
+  transition: 0.1s;
+  border-bottom: 4px solid black;
+  border-radius: 0;
+  line-height: 0.3px;
+
+
 }
 
 /* Profile Section */

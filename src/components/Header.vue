@@ -1,6 +1,6 @@
 <template>
   <header class="clean-header">
-    <div class="logo">PotasFlix</div>
+    <div class="logo">PotasFlix </div>
     <nav class="navigation">
       <button 
         v-for="tab in tabs" 
@@ -128,11 +128,8 @@ export default {
 
 .nav-item:hover {
   font-size: 20px;
-  transition: 0.1s;
-  border-bottom: 4px solid black;
-  border-radius: 0;
-  line-height: 0.3px;
-
+  transition: 0.2s;
+  
 
 }
 
@@ -226,7 +223,14 @@ export default {
   transition: 0.3s;
 }
 .logo:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
   transition: 0.4s;
+
 }
+
+.nav-item.active {
+  border-bottom: 4px solid black; /* Linha embaixo do item ativo */
+  color: black; /* Destaque no texto, se necessário */
+}
+
 </style>

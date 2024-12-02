@@ -1,44 +1,3 @@
-<template>
-  <header class="clean-header">
-    <div class="logo">PotasFlix</div>
-    <nav class="navigation">
-      <button 
-        v-for="tab in tabs" 
-        :key="tab" 
-        class="nav-item" 
-        :class="{ active: activeTab === tab }" 
-        @click="setActive(tab)">
-        {{ tab }}
-      </button>
-    </nav>
-    <div class="profile">
-      <div class="search-container" 
-           @mouseenter="handleHover" 
-           @mouseleave="handleMouseLeave">
-        <!-- Campo de pesquisa -->
-        <input 
-          ref="searchInput"
-          v-model="searchQuery" 
-          type="text" 
-          class="search-box" 
-          placeholder="Pesquisar..."
-          :class="{ expanded: isSearchActive }"
-        />
-        <!-- Lupinha de pesquisa à direita -->
-        <i class="icon bi bi-search" @click="focusSearch">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-          </svg>
-        </i>
-      </div>
-      <div class="user">
-        <button class="signup">Signup</button>
-        <button class="login">Login</button>
-      </div>
-    </div>
-  </header>
-</template>
-
 <script>
 import { ref } from "vue";
 
@@ -83,8 +42,46 @@ export default {
 };
 </script>
 
+<template>
+  <header class="clean-header">
+    <div class="logo">PotasFlix</div>
+    <nav class="navigation">
+      <button 
+        v-for="tab in tabs" 
+        :key="tab" 
+        class="nav-item" 
+        :class="{ active: activeTab === tab }" 
+        @click="setActive(tab)">
+        {{ tab }}
+      </button>
+    </nav>
+    <div class="profile">
+      <div class="search-container" 
+           @mouseenter="handleHover" 
+           @mouseleave="handleMouseLeave">
+        <input 
+          ref="searchInput"
+          v-model="searchQuery" 
+          type="text" 
+          class="search-box" 
+          placeholder="Pesquisar..."
+          :class="{ expanded: isSearchActive }"
+        />
+        <i class="icon bi bi-search" @click="focusSearch">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+          </svg>
+        </i>
+      </div>
+      <div class="user">
+        <button class="signup">Signup</button>
+        <button class="login">Login</button>
+      </div>
+    </div>
+  </header>
+</template>
+
 <style scoped>
-/* Header Container */
 .clean-header {
   display: flex;
   justify-content: space-between;
@@ -101,7 +98,6 @@ export default {
   z-index: 100;
 }
 
-/* Logo */
 .logo {
   font-size: 1.3rem;
   font-weight: bold;
@@ -110,7 +106,7 @@ export default {
 .logo:hover {
   cursor: pointer ;
 }
-/* Navigation */
+
 .navigation {
   display: flex;
   gap: 20px;
@@ -135,24 +131,22 @@ export default {
 
 }
 
-/* Profile Section */
 .profile {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* Search Container */
 .search-container {
   position: relative;
   display: flex;
   align-items: center;
-  flex-direction: row-reverse; /* Faz a lupa aparecer à direita */
+  flex-direction: row-reverse; 
 }
 
 .icon {
-  font-size: 2rem; /* Aumentando a lupa */
-  color: black; /* Tornando a lupa preta */
+  font-size: 2rem; 
+  color: black; 
   cursor: pointer;
   transition: color 0.3s;
 }
@@ -190,7 +184,6 @@ export default {
   font-style: italic;
 }
 
-/* Buttons Style */
 .signup,
 .login {
   width: 90px;
@@ -231,8 +224,8 @@ export default {
 }
 
 .nav-item.active {
-  border-bottom: 4px solid black; /* Linha embaixo do item ativo */
-  color: black; /* Destaque no texto, se necessário */
+  border-bottom: 4px solid black;
+  color: black; 
 }
 
 </style>

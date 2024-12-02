@@ -5,7 +5,7 @@ import Carousel from "./components/Carousel.vue";
 export default {
   components: {
     Header,
-    Carousel
+    Carousel,
   },
   setup() {
     const carouselSlides = [
@@ -23,5 +23,5 @@ export default {
 
 <template>
   <Header />
-  <Carousel />
+  <Carousel />n
 </template>

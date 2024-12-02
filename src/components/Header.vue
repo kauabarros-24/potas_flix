@@ -1,6 +1,6 @@
 <template>
   <header class="clean-header">
-    <div class="logo">PotasFlix </div>
+    <div class="logo">PotasFlix</div>
     <nav class="navigation">
       <button 
         v-for="tab in tabs" 
@@ -107,7 +107,9 @@ export default {
   font-weight: bold;
   color: #333;
 }
-
+.logo:hover {
+  cursor: pointer ;
+}
 /* Navigation */
 .navigation {
   display: flex;

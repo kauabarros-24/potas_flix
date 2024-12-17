@@ -1,210 +1,141 @@
-<script>
-import { ref } from "vue";
-
-export default {
-  setup() {
-    const tabs = ["Home", "Series", "Originals"];
-    const activeTab = ref("Home");
-    const searchQuery = ref("");
-    const isSearchActive = ref(false);
-    const searchInput = ref(null);
-
-    const setActive = (tab) => {
-      activeTab.value = tab;
-    };
-
-    const handleHover = () => {
-      isSearchActive.value = true;
-    };
-
-    const handleMouseLeave = () => {
-      if (!searchQuery.value) {
-        isSearchActive.value = false;
-      }
-    };
-
-    const focusSearch = () => {
-      searchInput.value.focus();
-    };
-
-    return {
-      tabs,
-      activeTab,
-      searchQuery,
-      isSearchActive,
-      searchInput,
-      setActive,
-      handleHover,
-      handleMouseLeave,
-      focusSearch,
-    };
-  },
-};
-</script>
-
+<script setup></script>
 <template>
-  <header class="clean-header">
-    <div class="logo">PotasFlix</div>
-    <nav class="navigation">
-      <button 
-        v-for="tab in tabs" 
-        :key="tab" 
-        class="nav-item" 
-        :class="{ active: activeTab === tab }" 
-        @click="setActive(tab)">
-        {{ tab }}
-      </button>
-    </nav>
-    <div class="profile">
-      <div class="search-container" 
-           @mouseenter="handleHover" 
-           @mouseleave="handleMouseLeave">
-        <input 
-          ref="searchInput"
-          v-model="searchQuery" 
-          type="text" 
-          class="search-box" 
-          placeholder="Pesquisar..."
-          :class="{ expanded: isSearchActive }"
-        />
-        <i class="icon bi bi-search" @click="focusSearch">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-          </svg>
-        </i>
-      </div>
-      <div class="user">
-        <button class="signup">Signup</button>
-        <button class="login">Login</button>
-      </div>
-    </div>
-  </header>
+    <header>
+        <div class="logo">PotasFlix</div>
+        <div class="Page">
+            <li>Home</li>
+            <li>Series</li>
+            <li>Originals</li>
+        </div>
+        <div class="Search">
+            <input type="text" placeholder="Pesquisar...">
+            <p>o</p>
+        </div>
+        <div class="User">
+            <button class="signup">Signup</button>
+            <button class="login">Login</button>
+        </div>
+    </header>
 </template>
 
-<style scoped>
-.clean-header {
+<style>
+header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  border-radius: 10px;
-  color: #333;
+  justify-content: space-between;
+  padding: 10px;
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  z-index: 1000; 
+  height: 15%;
+  font-weight: bold;
+  border: 1px solid salmon;
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .logo {
-  font-size: 1.3rem;
+  margin-left: 10px;
+  font-size: 2rem;
   font-weight: bold;
-  color: #333;
+  color: black;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
+
 .logo:hover {
-  cursor: pointer ;
+  transform: scale(1.1);
 }
 
-.navigation {
+.Page {
   display: flex;
-  gap: 20px;
+  gap: 30px;
+  list-style: none;
+  justify-content: center;
+  flex: 1;
 }
 
-.nav-item {
-  background: none;
-  font-size: 1rem;
-  border: none;
-  color: #555;
+.Page li {
   cursor: pointer;
-  font-family: sans-serif;
+  font-size: 1.2rem; 
+  position: relative; 
+  padding: 5px 0; 
+  color: black;
   font-weight: bold;
-  padding: 8px 15px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: font-size 0.3s ease;
 }
 
-.nav-item:hover {
-  font-size: 20px;
-  transition: 0.2s;
-  
-
-}
-
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse; 
-}
-
-.icon {
-  font-size: 2rem; 
-  color: black; 
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.icon:hover {
-  color: #333;
-}
-
-.search-box {
+.Page li::after {
+  content: ''; 
   position: absolute;
-  top: 50%;
-  right: 40px;
-  transform: translateY(-50%);
-  width: 0px;
-  padding: 0;
-  opacity: 0;
-  border: 1px solid transparent;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px; 
+  background-color: black; 
+  transition: width 0.3s ease; 
+}
+
+.Page li:hover {
+  font-size: 1.5rem; 
+}
+
+.Page li:hover::after {
+  width: 100%; 
+}
+
+.Page li:not(:hover)::after {
+  width: 0; 
+}
+
+
+.Search {
+  display: flex;
+  align-items: center; 
+  margin-right: 20px;
+  gap: 5px;
+  color: black;
+  
+}
+
+.Search input {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 0.9rem;
-  background: white;
-  color: #333;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s ease;
 }
 
-.search-box.expanded {
-  width: 200px;
-  padding: 8px 10px;
-  opacity: 1;
-  border: 1px solid #ddd;
-}
-
-.search-box::placeholder {
-  color: #aaa;
-  font-style: italic;
+.User {
+  display: flex;
+  gap: 12px;
+  margin-right: 10px;
 }
 
 .signup,
 .login {
-  width: 90px;
-  padding: 10px 15px;
-  border-radius: 8px;
+  width: 80px;
+  height: 35px;
+  padding: 0; 
   font-family: 'Inter', sans-serif;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: transform 0.3s, background-color 0.3s, color 0.3s;
+  display: flex;             
+  align-items: center;         
+  justify-content: center;
+  border-radius: 5px;
 }
 
 .signup {
   background-color: white;
   color: black;
   border: 2px solid black;
-  margin-right: 10px;
 }
 
 .signup:hover {
-  transform: scale(1.05);
-  transition: 0.3s;
+  transform: scale(1.1);
+  background-color: black;
+  color: white;
 }
 
 .login {
@@ -214,18 +145,13 @@ export default {
 }
 
 .login:hover {
-  transform: scale(1.05);
-  transition: 0.3s;
-}
-.logo:hover {
-  transform: scale(1.2);
-  transition: 0.4s;
-
+  transform: scale(1.1);
+  background-color: white;
+  color: black;
 }
 
-.nav-item.active {
-  border-bottom: 4px solid black;
-  color: black; 
-}
 
+p {
+  font-size: 0.9rem;
+}
 </style>

@@ -1,157 +1,187 @@
-<script setup></script>
 <template>
+  <div>
+    <!-- Header com logo e menu hamburguer -->
     <header>
-        <div class="logo">PotasFlix</div>
-        <div class="Page">
-            <li>Home</li>
-            <li>Series</li>
-            <li>Originals</li>
-        </div>
-        <div class="Search">
-            <input type="text" placeholder="Pesquisar...">
-            <p>o</p>
-        </div>
-        <div class="User">
-            <button class="signup">Signup</button>
-            <button class="login">Login</button>
-        </div>
+      <div class="logo">
+        <h1>PotasFlix</h1>
+      </div>
+      <!-- Botão do Menu Hambúrguer -->
+      <div class="menu-hamburguer" @click="toggleMenu" aria-label="Abrir menu">
+        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
+        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
+        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
+      </div>
     </header>
+
+    <!-- Menu Deslizante -->
+    <div class="menu-overlay" :class="{'active': isMenuOpen}">
+      <div class="menu-content">
+        <button class="close-menu" @click="toggleMenu" aria-label="Fechar menu">X</button>
+
+        <!-- Links do Menu -->
+        <div class="menu-links">
+          <router-link to="/originals" class="menu-link">Originals</router-link>
+          <router-link to="/series" class="menu-link">Series</router-link>
+          <router-link to="/movies" class="menu-link">Movies</router-link>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style>
+<script setup>
+import { ref } from 'vue';
+
+const isMenuOpen = ref(false);
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+</script>
+
+<style scoped>
+/* Header */
 header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px;
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  z-index: 1000; 
-  height: 15%;
-  font-weight: bold;
-  border: 1px solid salmon;
-  font-family: 'Inter', sans-serif;
+  align-items: center;
+  color: black;
+  position: fixed;
+  top: 5px; /* Ajustado para 5px do topo */
+  left: 0;
+  right: 0;
+  z-index: 999;
 }
 
 .logo {
   margin-left: 10px;
-  font-size: 2rem;
-  font-weight: bold;
-  color: black;
-  cursor: pointer;
-  transition: transform 0.3s ease, color 0.3s ease;
+  border: 1px solid peru;
+  padding: 10px 10px 10px 10px;
 }
+
 
 .logo:hover {
-  transform: scale(1.1);
+  font-size: 110%; /* Aumenta o tamanho do título quando o logo for hoverado */
+  transition: 0.3s;
 }
 
-.Page {
+/* Menu Hambúrguer */
+.menu-hamburguer {
   display: flex;
-  gap: 30px;
-  list-style: none;
-  justify-content: center;
-  flex: 1;
-}
-
-.Page li {
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
   cursor: pointer;
-  font-size: 1.2rem; 
-  position: relative; 
-  padding: 5px 0; 
-  color: black;
-  font-weight: bold;
-  transition: font-size 0.3s ease;
-}
-
-.Page li::after {
-  content: ''; 
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 4px; 
-  background-color: black; 
-  transition: width 0.3s ease; 
-}
-
-.Page li:hover {
-  font-size: 1.5rem; 
-}
-
-.Page li:hover::after {
-  width: 100%; 
-}
-
-.Page li:not(:hover)::after {
-  width: 0; 
-}
-
-
-.Search {
-  display: flex;
-  align-items: center; 
-  margin-right: 20px;
-  gap: 5px;
-  color: black;
-  
-}
-
-.Search input {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.User {
-  display: flex;
-  gap: 12px;
   margin-right: 10px;
 }
 
-.signup,
-.login {
-  width: 80px;
-  height: 35px;
-  padding: 0; 
-  font-family: 'Inter', sans-serif;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.3s, background-color 0.3s, color 0.3s;
-  display: flex;             
-  align-items: center;         
-  justify-content: center;
-  border-radius: 5px;
-}
-
-.signup {
-  background-color: white;
-  color: black;
-  border: 2px solid black;
-}
-
-.signup:hover {
-  transform: scale(1.1);
+.bar {
+  height: 5px;
+  width: 100%;
   background-color: black;
-  color: white;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.login {
-  background-color: black; 
-  color: white;
-  border: 2px solid black;
+.change {
+  transform: rotate(45deg);
 }
 
-.login:hover {
-  transform: scale(1.1);
+.change:nth-child(2) {
+  opacity: 0;
+}
+
+.change:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+/* Menu Overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+  height: 100%;
   background-color: white;
-  color: black;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateX(100%);
+  opacity: 0;
 }
 
+.menu-overlay.active {
+  transform: translateX(0);
+  opacity: 1;
+}
 
-p {
-  font-size: 0.9rem;
+/* Conteúdo do Menu */
+.menu-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.close-menu {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.menu-link:hover {
+  color: #ff6347; /* Cor de destaque no hover */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .menu-hamburguer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+  }
+
+  .menu-overlay {
+    width: 100%;
+    padding: 30px;
+  }
+
+  .menu-links {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-links a {
+    font-size: 1.2rem;
+  }
+
+  .menu-overlay {
+    width: 100%;
+  }
+
+  .menu-content {
+    width: 100%;
+  }
 }
 </style>

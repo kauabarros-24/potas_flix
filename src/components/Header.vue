@@ -1,43 +1,73 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
+import { defineProps } from "vue";
 
 const isMenuOpen = ref(false);
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
+
+defineProps({
+  title: {
+    type: String,
+    default: "PotasFlix",
+  },
+  menuLinks: {
+    type: Array,
+    default: () => [
+      { name: "Originals", path: "/originals" },
+      { name: "Series", path: "/series" },
+      { name: "Movies", path: "/movies" },
+      { name: "Documentaries", path: "/documentaries" },
+      { name: "Anime", path: "/anime" },
+      { name: "Kids", path: "/kids" },
+    ],
+  },
+  accountLabel: {
+    type: String,
+    default: "Minha Conta",
+  },
+});
 </script>
 
 <template>
   <div>
     <header>
       <div class="logo">
-        <h1>PotasFlix</h1>
+        <h1>{{ title }}</h1>
       </div>
       <div class="menu-hamburguer" @click="toggleMenu" aria-label="Abrir menu">
-        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
-        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
-        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
+        <div :class="{ bar: true, change: isMenuOpen }"></div>
+        <div :class="{ bar: true, change: isMenuOpen }"></div>
+        <div :class="{ bar: true, change: isMenuOpen }"></div>
       </div>
-      <div class="menu-overlay" :class="{'active': isMenuOpen}">
+      <div class="menu-overlay" :class="{ active: isMenuOpen }">
         <div class="menu-content">
           <button class="close-menu" @click="toggleMenu" aria-label="Fechar menu">X</button>
           <div class="menu-search">
-            <input v-show="isMenuOpen" type="text" placeholder="Search..." aria-label="Search" />
+            <input
+              v-show="isMenuOpen"
+              type="text"
+              placeholder="Search..."
+              aria-label="Search"
+            />
             <i class="bi bi-search"></i>
           </div>
           <hr />
           <div class="menu-links">
-            <router-link to="/originals" class="menu-link" id="originals">Originals</router-link>
-            <router-link to="/series" class="menu-link" id="series">Series</router-link>
-            <router-link to="/movies" class="menu-link" id="movies">Movies</router-link>
-            <router-link to="/documentaries" class="menu-link" id="documentaries">Documentaries</router-link>
-            <router-link to="/anime" class="menu-link" id="anime">Anime</router-link>
-            <router-link to="/kids" class="menu-link" id="kids">Kids</router-link>
+            <router-link
+              v-for="(link, index) in menuLinks"
+              :key="index"
+              :to="link.path"
+              class="menu-link"
+            >
+              {{ link.name }}
+            </router-link>
           </div>
-          <hr>
+          <hr />
           <div class="menu-account">
             <i class="bi bi-person-circle"></i>
-            <p>Minha Conta</p>
+            <p>{{ accountLabel }}</p>
           </div>
         </div>
       </div>
@@ -63,6 +93,11 @@ header {
   margin-left: 10px;
   padding: 10px;
   cursor: pointer;
+}
+.logo h1:hover {
+  font-size: 250%;
+  transition: 0.1s;
+  border: 1px solid black
 }
 
 .menu-hamburguer {
@@ -133,6 +168,14 @@ header {
   align-items: center;
 }
 
+.menu-account p {
+  font-size: 20px;
+}
+.menu-account:hover {
+  font-size: 120%;
+  transition: 0.1s;
+}
+
 .menu-search {
   display: flex;
   align-items: center;
@@ -184,7 +227,11 @@ header {
 }
 
 .menu-link:hover {
-  color: #ff6347;
+  font-style: italic;
+  color: black;
+  transition: 1s;
+  font-weight: none;
+
 }
 
 .close-menu {
@@ -196,8 +243,12 @@ header {
   background: transparent;
   border: none;
   font-size: 20px;
-  cursor: pointer;
   color: black;
+}
+
+.bi-person-circle {
+  font-size: 20px;
+
 }
 
 @media (max-width: 768px) {

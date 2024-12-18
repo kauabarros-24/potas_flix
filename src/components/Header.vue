@@ -1,34 +1,3 @@
-<template>
-  <div>
-    <!-- Header com logo e menu hamburguer -->
-    <header>
-      <div class="logo">
-        <h1>PotasFlix</h1>
-      </div>
-      <!-- Botão do Menu Hambúrguer -->
-      <div class="menu-hamburguer" @click="toggleMenu" aria-label="Abrir menu">
-        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
-        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
-        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
-      </div>
-    </header>
-
-    <!-- Menu Deslizante -->
-    <div class="menu-overlay" :class="{'active': isMenuOpen}">
-      <div class="menu-content">
-        <button class="close-menu" @click="toggleMenu" aria-label="Fechar menu">X</button>
-
-        <!-- Links do Menu -->
-        <div class="menu-links">
-          <router-link to="/originals" class="menu-link">Originals</router-link>
-          <router-link to="/series" class="menu-link">Series</router-link>
-          <router-link to="/movies" class="menu-link">Movies</router-link>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref } from 'vue';
 
@@ -38,33 +7,63 @@ const toggleMenu = () => {
 };
 </script>
 
+<template>
+  <div>
+    <header>
+      <div class="logo">
+        <h1>PotasFlix</h1>
+      </div>
+      <div class="menu-hamburguer" @click="toggleMenu" aria-label="Abrir menu">
+        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
+        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
+        <div :class="{'bar': true, 'change': isMenuOpen}"></div>
+      </div>
+      <div class="menu-overlay" :class="{'active': isMenuOpen}">
+        <div class="menu-content">
+          <button class="close-menu" @click="toggleMenu" aria-label="Fechar menu">X</button>
+          <div class="menu-search">
+            <input v-show="isMenuOpen" type="text" placeholder="Search..." aria-label="Search" />
+            <i class="bi bi-cart cart-icon"></i>
+          </div>
+          <hr />
+          <div class="menu-links">
+            <router-link to="/originals" class="menu-link" id="originals">Originals</router-link>
+            <router-link to="/series" class="menu-link" id="series">Series</router-link>
+            <router-link to="/movies" class="menu-link" id="movies">Movies</router-link>
+            <!-- Links continuam aqui -->
+          </div>
+          <hr>
+          <div class="menu-account">
+            <i class="bi bi-person-circle"></i>
+            <p>Minha Conta</p>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+</template>
+
 <style scoped>
-/* Header */
+/* Header styles */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: black;
   position: fixed;
-  top: 5px; /* Ajustado para 5px do topo */
+  top: 0;
   left: 0;
   right: 0;
   z-index: 999;
+  cursor: pointer;
 }
 
-.logo {
+.logo h1 {
   margin-left: 10px;
-  border: 1px solid peru;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
+  cursor: pointer;
 }
 
-
-.logo:hover {
-  font-size: 110%; /* Aumenta o tamanho do título quando o logo for hoverado */
-  transition: 0.3s;
-}
-
-/* Menu Hambúrguer */
 .menu-hamburguer {
   display: flex;
   flex-direction: column;
@@ -94,18 +93,18 @@ header {
   transform: rotate(-45deg);
 }
 
-/* Menu Overlay */
+/* Menu overlay */
 .menu-overlay {
   position: fixed;
   top: 0;
   right: 0;
-  width: 80%;
+  width: 18%;
   height: 100%;
   background-color: white;
   z-index: 999;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 20px;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -118,20 +117,50 @@ header {
   opacity: 1;
 }
 
-/* Conteúdo do Menu */
 .menu-content {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.close-menu {
-  align-self: flex-end;
-  background: transparent;
-  border: none;
-  font-size: 2rem;
+/* Menu Search */
+.menu-account {
+  display: flex;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.menu-search {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.menu-search input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px 5px 5px 5px;
+  border: 1px black solid;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.menu-search input.fade-out {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.cart-icon {
+  margin-left: 10px;
+  font-size: 24px;
+  color: black;
   cursor: pointer;
-  color: #333;
+  transition: transform 0.3s ease-in-out;
+}
+
+.cart-icon:hover {
+  transform: rotate(180deg);
 }
 
 .menu-links {
@@ -144,44 +173,29 @@ header {
   text-decoration: none;
   color: #333;
   font-size: 1.5rem;
-  transition: color 0.3s ease;
 }
 
 .menu-link:hover {
-  color: #ff6347; /* Cor de destaque no hover */
+  color: #ff6347;
 }
 
-/* Responsividade */
+/* Close menu button */
+.close-menu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: black;
+}
+
+/* Media queries */
 @media (max-width: 768px) {
-  .menu-hamburguer {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 25px;
-  }
-
   .menu-overlay {
-    width: 100%;
-    padding: 30px;
-  }
-
-  .menu-links {
-    gap: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .menu-links a {
-    font-size: 1.2rem;
-  }
-
-  .menu-overlay {
-    width: 100%;
-  }
-
-  .menu-content {
-    width: 100%;
+    width: 50%;
   }
 }
 </style>

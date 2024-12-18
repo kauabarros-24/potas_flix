@@ -23,14 +23,16 @@ const toggleMenu = () => {
           <button class="close-menu" @click="toggleMenu" aria-label="Fechar menu">X</button>
           <div class="menu-search">
             <input v-show="isMenuOpen" type="text" placeholder="Search..." aria-label="Search" />
-            <i class="bi bi-cart cart-icon"></i>
+            <i class="bi bi-search"></i>
           </div>
           <hr />
           <div class="menu-links">
             <router-link to="/originals" class="menu-link" id="originals">Originals</router-link>
             <router-link to="/series" class="menu-link" id="series">Series</router-link>
             <router-link to="/movies" class="menu-link" id="movies">Movies</router-link>
-            <!-- Links continuam aqui -->
+            <router-link to="/documentaries" class="menu-link" id="documentaries">Documentaries</router-link>
+            <router-link to="/anime" class="menu-link" id="anime">Anime</router-link>
+            <router-link to="/kids" class="menu-link" id="kids">Kids</router-link>
           </div>
           <hr>
           <div class="menu-account">
@@ -44,7 +46,6 @@ const toggleMenu = () => {
 </template>
 
 <style scoped>
-/* Header styles */
 header {
   display: flex;
   justify-content: space-between;
@@ -93,7 +94,6 @@ header {
   transform: rotate(-45deg);
 }
 
-/* Menu overlay */
 .menu-overlay {
   position: fixed;
   top: 0;
@@ -121,19 +121,23 @@ header {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
+  justify-content: space-between; /* Ajusta para empurrar Minha Conta para baixo */
 }
 
-/* Menu Search */
 .menu-account {
   display: flex;
   width: 100%;
-  margin: 10px 0;
+  gap: 10px;
+  margin-top: auto; /* Garante que a seção fique no final */
+  align-items: center;
 }
 
 .menu-search {
   display: flex;
   align-items: center;
-  margin: 10px 0;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
 .menu-search input {
@@ -141,9 +145,11 @@ header {
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 5px 5px 5px 5px;
+  border-radius: 5px;
   border: 1px black solid;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  width: 30%;
+  height: 70%;
 }
 
 .menu-search input.fade-out {
@@ -151,22 +157,24 @@ header {
   transform: translateX(-50px);
 }
 
-.cart-icon {
+.bi-search {
   margin-left: 10px;
-  font-size: 24px;
+  font-size: 20px;
   color: black;
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
 }
 
-.cart-icon:hover {
-  transform: rotate(180deg);
+.bi-search:hover {
+  transform: rotate(-50deg);
 }
 
 .menu-links {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .menu-link {
@@ -179,11 +187,11 @@ header {
   color: #ff6347;
 }
 
-/* Close menu button */
 .close-menu {
   position: absolute;
   top: 10px;
   right: 10px;
+  border: 2px solid black;
   z-index: 999;
   background: transparent;
   border: none;
@@ -192,7 +200,6 @@ header {
   color: black;
 }
 
-/* Media queries */
 @media (max-width: 768px) {
   .menu-overlay {
     width: 50%;

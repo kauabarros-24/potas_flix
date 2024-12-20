@@ -1,28 +1,44 @@
-<script>
-import { ref } from 'vue';
-
-const currentSlide = ref(0);
-
-const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + moviesStore.movies.length) % moviesStore.movies.length;
-};
-
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % moviesStore.movies.length;
-};
-</script>
-
 <script setup>
-import { onMounted } from 'vue';
-import { useMoviesStore } from '@/stores/useMoviesStore';
-import { ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useMoviesStore } from '../stores/cards';
 
 const moviesStore = useMoviesStore();
+const currentSlide = ref(0);
+
+const props = defineProps({
+  intervalTime: {
+    type: Number,
+    default: 2500
+  },
+  itemsPerSlide: {
+    type: Number,
+    default: 4
+  }
+});
 
 onMounted(() => {
   moviesStore.fetchMovies();
 
+  const interval = setInterval(() => {
+    nextSlide();
+  }, props.intervalTime);
 
+  return () => clearInterval(interval);
+});
+
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % Math.ceil(moviesStore.movies.length / props.itemsPerSlide);
+};
+
+const prevSlide = () => {
+  currentSlide.value =
+    (currentSlide.value - 1 + Math.ceil(moviesStore.movies.length / props.itemsPerSlide)) %
+    Math.ceil(moviesStore.movies.length / props.itemsPerSlide);
+};
+
+const visibleMovies = computed(() => {
+  const start = currentSlide.value * props.itemsPerSlide;
+  return moviesStore.movies.slice(start, start + props.itemsPerSlide);
 });
 </script>
 
@@ -32,28 +48,18 @@ onMounted(() => {
   </div>
   <div v-else class="carousel">
     <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-      <div class="carousel-slide" v-for="movie in moviesStore.movies" :key="movie.id">
+      <div
+        class="carousel-slide"
+        v-for="(movie, index) in moviesStore.movies"
+        :key="movie.id"
+      >
+        <div class="backdrop" :style="{ backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop})` }"></div>
         <div class="slide-content">
           <h1 class="movie-title">{{ movie.title }}</h1>
           <p class="movie-description">{{ movie.description }}</p>
-          <iframe
-            v-if="movie.trailerKey"
-            class="movie-trailer"
-            :src="`https://www.youtube.com/embed/${movie.trailerKey}`"
-            frameborder="0"
-            allow="autoplay; encrypted-media"
-            allowfullscreen
-          ></iframe>
+          <button class="watch-button">Assistir</button>
         </div>
-        <div
-          class="backdrop"
-          :style="{ backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop})` }"
-        ></div>
       </div>
-    </div>
-    <div class="carousel-controls">
-      <button @click="prevSlide">❮</button>
-      <button @click="nextSlide">❯</button>
     </div>
   </div>
 </template>
@@ -86,31 +92,51 @@ onMounted(() => {
   background-size: cover;
   background-position: center;
   z-index: -1;
-  filter: brightness(0.5);
+  filter: brightness(0.4);
 }
 
 .slide-content {
   position: absolute;
-  bottom: 50px;
-  left: 50px;
+  top: 58%; 
+  left: 19px; 
+  transform: translateY(-50%); 
   color: white;
   z-index: 10;
+  text-align: left;
+  width: 90%;
 }
 
 .movie-title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: bold;
+  margin-bottom: 10px;
+  padding-left: 0;
 }
 
 .movie-description {
-  font-size: 1.5rem;
-  margin-top: 10px;
+  font-size: 1.2rem;
+  top: 10%;
+  line-height: 1.5;
+  max-width: 600px;
+  padding-left: 1px;
 }
 
-.movie-trailer {
+.watch-button {
+  display: inline-block;
+  padding: 10px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
   margin-top: 20px;
-  width: 560px;
-  height: 315px;
+}
+
+.watch-button:hover {
+  background-color: #444;
 }
 
 .carousel-controls {
@@ -120,18 +146,36 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   transform: translateY(-50%);
+  z-index: 20;
 }
 
-.carousel-controls button {
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 1.5rem;
-  cursor: pointer;
+@media (max-width: 768px) {
+  .movie-title {
+    font-size: 2rem;
+  }
+
+  .movie-description {
+    font-size: 1rem;
+  }
+
+  .watch-button {
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
 }
 
-.carousel-controls button:hover {
-  background: rgba(0, 0, 0, 0.8);
+@media (max-width: 480px) {
+  .movie-title {
+    font-size: 1.5rem;
+  }
+
+  .movie-description {
+    font-size: 0.9rem;
+  }
+
+  .watch-button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
 }
 </style>

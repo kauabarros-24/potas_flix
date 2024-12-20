@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import tmdb from '../api/tmdb'; // A instância do Axios configurada
+import tmdb from '../plugins/axios/';
 
 export const useMoviesStore = defineStore('movies', {
   state: () => ({
-    movies: [], // Armazena os filmes para o carrossel
+    movies: [], 
     loading: false,
     error: null,
   }),
@@ -16,28 +16,37 @@ export const useMoviesStore = defineStore('movies', {
           params: { page: 1 },
         });
 
-        // Pegue os detalhes adicionais do trailer para os 3 primeiros filmes
-        const trailers = await Promise.all(
-          data.results.slice(0, 3).map(async (movie) => {
+        const trailers = [];
+
+        for (let i = 1; i <= 30; i++) {
+          const movie = data.results[i]; 
+          console.log(movie)
+          if (!movie) 
+            continue; 
+          try {
             const movieDetails = await tmdb.get(`/movie/${movie.id}`, {
               params: { append_to_response: 'videos' },
             });
+
             const trailer = movieDetails.data.videos.results.find(
               (video) => video.type === 'Trailer' && video.site === 'YouTube'
             );
-            return {
+
+            trailers.push({
               id: movie.id,
               title: movie.title,
               description: movie.overview,
               backdrop: movie.backdrop_path,
               trailerKey: trailer?.key || null,
-            };
-          })
-        );
+            });
+          } catch (innerError) {
+            console.error(`Erro ao buscar detalhes para o filme "${movie.title}":`, innerError);
+          }
+        }
 
         this.movies = trailers;
       } catch (err) {
-        this.error = 'Failed to fetch movies';
+        this.error = 'Erro na busca dos filmes';
         console.error(err);
       } finally {
         this.loading = false;
